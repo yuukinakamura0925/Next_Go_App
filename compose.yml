@@ -1,26 +1,27 @@
 services:
   backend:
-    # backendサービスの設定
     build:
       context: ./backend/
       dockerfile: Dockerfile
     ports:
       - 8080:8080
-    volumes:
-      - ./backend:/app
+    # volumes:
+    #   - ./backend:/app
     depends_on:
       - db
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
+      - CORS_ALLOWED_ORIGIN=http://localhost:3000
   frontend:
-    # frontendサービスの設定
     build:
       context: ./frontend/
       dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/app
+    # volumes:
+    #   - ./frontend:/app
     ports:
       - 3000:3000
   db:
-    # dbサービスの設定
     image: "postgres:15-alpine"
     ports:
       - "5432:5432"
@@ -31,5 +32,4 @@ services:
       - db-store:/var/lib/postgresql/data
 
 volumes:
-  # 永続化ボリュームの設定
   db-store:

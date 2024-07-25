@@ -1,20 +1,20 @@
-# ベースイメージを指定
+# 最新のGoイメージを使用
 FROM golang:latest
 
 # コンテナ内の作業ディレクトリを設定
 WORKDIR /app
 
-# ローカルのソースコードをコンテナにコピー
-COPY . .
-
-# 必要なパッケージをインストール
+# ローカルファイルをコンテナにコピー
+COPY go.mod go.sum ./
 RUN go mod download
 
-# アプリケーションをビルド
-RUN go build -o main .
+COPY . .
 
-# 公開予定のコンテナのポートを明示
+# Goアプリケーションをビルド
+RUN go build -o main ./cmd/main.go
+
+# ポート8080を公開
 EXPOSE 8080
 
-# アプリケーションを実行
-CMD ["go", "run", "main.go"]
+# Goアプリケーションを実行
+CMD ["./main"]
