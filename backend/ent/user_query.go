@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/book"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/predicate"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/user"
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/predicate"
+	"Next_Go_App/ent/user"
 )
 
 // UserQuery is the builder for querying User entities.

@@ -1,4 +1,4 @@
-module github.com/yuukinakamura0925/Next_Go_App
+module Next_Go_App
 
 go 1.22.5
 

@@ -11,9 +11,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/book"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/predicate"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/user"
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/predicate"
+	"Next_Go_App/ent/user"
 )
 
 const (

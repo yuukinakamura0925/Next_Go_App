@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/yuukinakamura0925/Next_Go_App/ent"
+	"Next_Go_App/ent"
 	// required by schema hooks.
-	_ "github.com/yuukinakamura0925/Next_Go_App/ent/runtime"
+	_ "Next_Go_App/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/migrate"
+	"Next_Go_App/ent/migrate"
 )
 
 type (

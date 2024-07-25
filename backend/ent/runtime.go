@@ -5,9 +5,9 @@ package ent
 import (
 	"time"
 
-	"github.com/yuukinakamura0925/Next_Go_App/ent/book"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/schema"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/user"
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/schema"
+	"Next_Go_App/ent/user"
 )
 
 // The init function reads all schema descriptors with runtime code

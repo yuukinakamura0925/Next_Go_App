@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/yuukinakamura0925/Next_Go_App/ent/runtime.go
+// The schema-stitching logic is generated in Next_Go_App/ent/runtime.go
 
 const (
 	Version = "v0.13.1"                                         // Version of ent codegen.
