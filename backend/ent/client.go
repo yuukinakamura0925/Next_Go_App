@@ -9,14 +9,14 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/yuukinakamura0925/Next_Go_App/ent/migrate"
+	"Next_Go_App/ent/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/book"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/user"
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/user"
 )
 
 // Client is the client that holds all ent builders.

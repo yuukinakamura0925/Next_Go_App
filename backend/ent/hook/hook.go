@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/yuukinakamura0925/Next_Go_App/ent"
+	"Next_Go_App/ent"
 )
 
 // The BookFunc type is an adapter to allow the use of ordinary

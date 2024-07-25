@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/predicate"
-	"github.com/yuukinakamura0925/Next_Go_App/ent/user"
+	"Next_Go_App/ent/predicate"
+	"Next_Go_App/ent/user"
 )
 
 // UserDelete is the builder for deleting a User entity.
