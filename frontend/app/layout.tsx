@@ -10,8 +10,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <nav className="bg-blue-600 p-4 text-white">
           <ul className="flex space-x-4">
-            <li><a href="/signup">新規登録</a></li>
-            <li><a href="/signin">サインイン</a></li>
+            <li><a href="/auth/sign_up">新規登録</a></li>
+            <li><a href="/auth/sign_in">サインイン</a></li>
             <li><a href="/books">本追加</a></li>
           </ul>
         </nav>
