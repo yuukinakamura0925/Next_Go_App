@@ -1,13 +1,20 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSSのベーススタイルをインポートします。これには、リセットやベースのスタイルが含まれます。 */
+@import 'tailwindcss/base';
+/* Tailwind CSSのコンポーネントをインポートします。これには、ボタンやフォームなどの再利用可能なUIコンポーネントが含まれます。 */
+@import 'tailwindcss/components';
+/* Tailwind CSSのユーティリティクラスをインポートします。これには、マージン、パディング、フォントサイズなどの低レベルのスタイルユーティリティが含まれます。 */
+@import 'tailwindcss/utilities';
 
+
+/* CSSのカスタムプロパティ（変数）を定義します。これにより、テーマやカラースキームを一元管理できます。 */
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
 
+/* ユーザーのシステム設定に応じて、ダークモード用のカスタムプロパティを定義します。 */
+/* ユーザーがダークモードを使用しているかどうかを確認します。 */
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -16,16 +23,18 @@
   }
 }
 
+/* ボディ要素のスタイルを設定します。カラープロパティはカスタムプロパティを使用して設定され、背景は線形グラデーションで定義されます。 */
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    to bottom,
+    transparent,
+    rgb(var(--background-end-rgb))
+  )
+  rgb(var(--background-start-rgb));
 }
 
+/* Tailwind CSSのユーティリティレイヤーにカスタムユーティリティクラスを追加します。text-balance クラスは、テキストのラップをバランスよく行うためのものです。 */
 @layer utilities {
   .text-balance {
     text-wrap: balance;

@@ -38,8 +38,14 @@ import (
 )
 
 func main() {
+
 	// Ginフレームワークのデフォルトの設定を使用してルータを作成
 	router := gin.Default()
+
+	// internal/middlewaresパッケージのCORSMiddleware関数を使用してCORSミドルウェアを設定
+	// 1.リクエストはまずここを通る
+	router.Use(middlewares.CORSMiddleware())
+
 	// internal/dbパッケージのNewClient関数を使用してデータベースクライアントを作成
 	client := db.NewClient()
 
@@ -53,10 +59,6 @@ func main() {
 	bookRepo := repositories.NewBookRepository(client)
 	bookUsecase := usecases.NewBookUsecase(bookRepo)
 	handlers.NewBookHandler(router, bookUsecase)
-
-	// internal/middlewaresパッケージのCORSMiddleware関数を使用してCORSミドルウェアを設定
-	// 1.リクエストはまずここを通る
-	router.Use(middlewares.CORSMiddleware())
 
 	// ルートハンドラの定義
 	router.GET("/", func(c *gin.Context) {

@@ -1,23 +1,23 @@
-# 新しいバージョンの指定
+# ベースイメージ
 FROM node:18-alpine
 
 # 作業ディレクトリを設定
 WORKDIR /app
 
-# キャッシュ利用で効率化するために別でコピー
+# package.json と package-lock.json をコピー
 COPY package.json package-lock.json ./
 
-# ソースコードをコピー
-COPY . .
-
 # 依存関係をインストール
-RUN npm install
+RUN npm install --legacy-peer-deps
+
+# アプリケーションのソースコードをコピー
+COPY . .
 
 # アプリケーションをビルド
 RUN npm run build
 
-# ポート番号を指定
+# ポートを指定
 EXPOSE 3000
 
 # アプリケーションを起動
-CMD ["npm","run","dev"]
+CMD ["npm", "start"]
