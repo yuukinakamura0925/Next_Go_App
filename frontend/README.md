@@ -2,7 +2,6 @@
 まず、開発サーバーを実行します：
 
 bash
-コードをコピーする
 npm run dev
 # または
 yarn dev

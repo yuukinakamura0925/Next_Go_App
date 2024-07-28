@@ -25,7 +25,6 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 		Password string `json:"password" binding:"required"`
 	}
 
-	// reqという変数をSignUpRequest構造体型で宣言しています。この変数にリクエストデータがマッピングされます。
 	var req SignUpRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(400, gin.H{"error": "Invalid request"})
