@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; 
 import apiClient from '../../api/client';
 import AuthForm from '../../../components/organisms/AuthForm';
@@ -23,6 +23,8 @@ export default function SignInPage() {
       });
 
       if (response.status === 200) {
+        localStorage.setItem('token', response.data.token); // トークンを保存
+        window.dispatchEvent(new Event('storage')); // ストレージイベントをトリガー
         setMessage('Sign in successful!');
         setIsError(false);
         router.push('/dashboard'); // サインイン成功時にリダイレクト
@@ -31,9 +33,9 @@ export default function SignInPage() {
         setIsError(true);
       }
     } catch (error: any) {
+      console.error("Sign in error:", error);
       setMessage(error.response?.data?.message || 'Sign in failed!');
       setIsError(true);
-      console.error('Sign in failed:', error);
     }
   };
 

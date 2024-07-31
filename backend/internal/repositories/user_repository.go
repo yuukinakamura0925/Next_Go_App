@@ -11,7 +11,7 @@ import (
 // UserRepository はユーザー関連のデータ操作を定義するインターフェースです。
 type IUserRepository interface {
 	CreateUser(ctx context.Context, email, name, password string) (*ent.User, error)
-	GetUserByEmailAndPassword(ctx context.Context, email, password string) (*ent.User, error)
+	GetUserByEmail(ctx context.Context, email string) (*ent.User, error)
 }
 
 // userRepository は UserRepository インターフェースを実装する構造体です。
@@ -35,9 +35,9 @@ func (r *userRepository) CreateUser(ctx context.Context, email, name, password s
 }
 
 // GetUserByEmailAndPassword は email と password に一致するユーザーを取得します。
-func (r *userRepository) GetUserByEmailAndPassword(ctx context.Context, email, password string) (*ent.User, error) {
+func (r *userRepository) GetUserByEmail(ctx context.Context, email string) (*ent.User, error) {
 	return r.client.User.
 		Query().
-		Where(user.EmailEQ(email), user.PasswordEQ(password)).
-		First(ctx)
+		Where(user.EmailEQ(email)).
+		Only(ctx)
 }
