@@ -26,12 +26,7 @@
 /* ボディ要素のスタイルを設定します。カラープロパティはカスタムプロパティを使用して設定され、背景は線形グラデーションで定義されます。 */
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgb(var(--background-end-rgb))
-  )
-  rgb(var(--background-start-rgb));
+  background-color: rgb(var(--background-start-rgb));
 }
 
 /* Tailwind CSSのユーティリティレイヤーにカスタムユーティリティクラスを追加します。text-balance クラスは、テキストのラップをバランスよく行うためのものです。 */
