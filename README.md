@@ -117,3 +117,24 @@ EXPOSE 3000
 # Next.jsアプリケーションを開発モードで起動
 CMD ["npm","run","dev"]
 ```
+
+
+# 仕様ツールバージョン
+- go 1.22.5
+- TypeScript: ^5（devDependenciesに記載）
+- React: ^18.3.1（dependenciesに記載）
+- Next.js: ^14.2.5（dependenciesに記載）
+## 依存関係のバージョン
+- axios: ^1.7.2
+- jwt-decode: ^3.1.2
+- autoprefixer: ^10.4.19
+- postcss: ^8.4.40
+- tailwindcss: ^3.4.7
+## 開発依存関係のバージョン
+- @babel/core: ^7.24.9
+- @babel/preset-env: ^7.25.0
+- @babel/preset-react: ^7.24.7
+- @typescript-eslint/eslint-plugin: ^7.17.0
+- @typescript-eslint/parser: ^7.17.0
+- eslint: ^8.57.0
+- stylelint: ^16.7.0

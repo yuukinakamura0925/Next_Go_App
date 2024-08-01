@@ -10,11 +10,14 @@ RUN go mod download
 
 COPY . .
 
-# Goアプリケーションをビルド
+# airをインストール
+RUN go install github.com/air-verse/air@latest
+
+# バイナリをビルド
 RUN go build -o main ./cmd/main.go
 
 # ポート8080を公開
 EXPOSE 8080
 
-# Goアプリケーションを実行
-CMD ["./main"]
+# airを実行
+CMD ["air"]

@@ -1,5 +1,3 @@
-# .github/PULL_REQUEST_TEMPLATE.md
-
 ## 概要
 
 - このPRの目的や背景を簡単に説明してください。
