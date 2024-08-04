@@ -17,7 +17,7 @@ export default function SignInPage() {
     e.preventDefault();
     setMessage(null);
     try {
-      const response = await apiClient.post('/users/sign_in', {
+      const response = await apiClient.post('/api/auth/users/sign_in', {
         email,
         password,
       });

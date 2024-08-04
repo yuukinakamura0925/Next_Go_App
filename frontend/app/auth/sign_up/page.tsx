@@ -16,7 +16,7 @@ export default function SignupPage() {
     e.preventDefault();
     setMessage(null);
     try {
-      const response = await apiClient.post('/users/sign_up', {
+      const response = await apiClient.post('/api/auth/users/sign_up', {
         name,
         email,
         password,

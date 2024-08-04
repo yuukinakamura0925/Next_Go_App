@@ -14,14 +14,14 @@ type BookHandler struct {
 	bookUsecase usecases.BookUsecase
 }
 
-func NewBookHandler(router *gin.Engine, bookUsecase usecases.BookUsecase) {
+func NewBookHandler(api *gin.RouterGroup, bookUsecase usecases.BookUsecase) {
 	handler := &BookHandler{bookUsecase: bookUsecase}
 
-	router.POST("/books", handler.CreateBook)
-	router.GET("/books", handler.GetAllBooks)
-	router.GET("/books/:id", handler.GetBookByID)
-	router.PATCH("/books/:id", handler.UpdateBook)
-	router.DELETE("/books/:id", handler.DeleteBook)
+	api.POST("/books", handler.CreateBook)
+	api.GET("/books", handler.GetAllBooks)
+	api.GET("/books/:id", handler.GetBookByID)
+	api.PATCH("/books/:id", handler.UpdateBook)
+	api.DELETE("/books/:id", handler.DeleteBook)
 }
 
 func (h *BookHandler) CreateBook(c *gin.Context) {

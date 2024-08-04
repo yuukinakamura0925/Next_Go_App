@@ -13,13 +13,15 @@ type UserHandler struct {
 }
 
 // NewUserHandler は新しい UserHandler を作成し、ルーティングを設定します。
-func NewUserHandler(router *gin.Engine, userUsecase usecases.UserUsecase) {
+func NewUserHandler(api *gin.RouterGroup, authApi *gin.RouterGroup, userUsecase usecases.UserUsecase) {
 	handler := &UserHandler{userUsecase: userUsecase}
 
 	// ユーザー登録エンドポイント
-	router.POST("/users/sign_up", handler.SignUp)
+	authApi.POST("/users/sign_up", handler.SignUp)
 	// ユーザーログインエンドポイント
-	router.POST("/users/sign_in", handler.SignIn)
+	authApi.POST("/users/sign_in", handler.SignIn)
+	// 現在のユーザー情報取得エンドポイント
+	api.GET("/users/me", handler.GetCurrentUser)
 }
 
 // SignUp は新しいユーザーを登録します。
@@ -62,4 +64,24 @@ func (h *UserHandler) SignIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+// GetCurrentUser は現在のユーザーの情報を取得します。
+func (h *UserHandler) GetCurrentUser(c *gin.Context) {
+	// ミドルウェアで設定されたユーザーのメールアドレスを取得
+	email, exists := c.Get("email")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		return
+	}
+
+	// ユーザーのメールアドレスを使用してデータベースからユーザー情報を取得
+	user, err := h.userUsecase.GetUserByEmail(context.Background(), email.(string))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user data"})
+		return
+	}
+
+	// ユーザー情報を返す
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
