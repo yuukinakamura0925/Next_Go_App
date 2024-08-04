@@ -13,6 +13,7 @@ import (
 type UserUsecase interface {
 	SignUp(ctx context.Context, email, name, password string) (*ent.User, error)
 	SignIn(ctx context.Context, email, password string) (string, error)
+	GetUserByEmail(ctx context.Context, email string) (*ent.User, error)
 }
 
 type userUsecase struct {
@@ -46,17 +47,14 @@ func (u *userUsecase) SignIn(ctx context.Context, email, password string) (strin
 	if user == nil {
 		return "", errors.New("user not found")
 	}
-
 	// パスワードサービスのチェック
 	if u.passwordSvc == nil {
 		return "", errors.New("password service is not initialized")
 	}
-
 	// パスワードハッシュを比較
 	if !u.passwordSvc.CheckPasswordHash(password, user.Password) {
 		return "", errors.New("incorrect password")
 	}
-
 	// JWTを生成
 	token, err := utils.GenerateJWT(user.Email)
 	if err != nil {
@@ -64,4 +62,9 @@ func (u *userUsecase) SignIn(ctx context.Context, email, password string) (strin
 	}
 
 	return token, nil
+}
+
+func (u *userUsecase) GetUserByEmail(ctx context.Context, email string) (*ent.User, error) {
+	// ユーザーをメールアドレスで取得
+	return u.userRepo.GetUserByEmail(ctx, email)
 }

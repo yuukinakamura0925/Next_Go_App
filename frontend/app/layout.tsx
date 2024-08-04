@@ -3,6 +3,7 @@
 import './globals.css';
 import { ReactNode, useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import AuthenticatedLayout from '../components/layouts/AuthenticatedLayout'; // AuthenticatedLayoutをインポート
 
 // ルートレイアウトコンポーネント
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -28,37 +29,36 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // ログアウト処理
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // トークンを削除
-    window.dispatchEvent(new Event('storage')); // ストレージイベントをトリガー
-    window.location.href = '/auth/sign_in'; // ログアウト後にサインインページへリダイレクト
-  };
-
   return (
     <html lang="en">
       <head>
         <title>My App</title>
       </head>
       <body>
-        <nav className="bg-blue-600 p-4 text-white">
-          <ul className="flex space-x-4">
-            {!isAuthenticated ? (
-              <>
-                <li><a href="/auth/sign_up">新規登録</a></li>
-                <li><a href="/auth/sign_in">サインイン</a></li>
-              </>
-            ) : (
-              <>
-                <li><a href="/dashboard">ダッシュボード</a></li>
-                <li><button onClick={handleLogout}>ログアウト</button></li>
-                <li><a href="/books">本追加</a></li>
-              </>
-            )}
-          </ul>
-        </nav>
-        <main className="p-4">{children}</main>
+        {isAuthenticated ? (
+          <AuthenticatedLayout>
+            {children}
+          </AuthenticatedLayout>
+        ) : (
+          <UnauthenticatedLayout>
+            {children}
+          </UnauthenticatedLayout>
+        )}
       </body>
     </html>
+  );
+}
+
+function UnauthenticatedLayout({ children }: { children: ReactNode }) {
+  return (
+    <div>
+      <nav className="bg-blue-600 p-4 text-white">
+        <ul className="flex space-x-4">
+          <li><a href="/auth/sign_up">新規登録</a></li>
+          <li><a href="/auth/sign_in">サインイン</a></li>
+        </ul>
+      </nav>
+      <main className="p-4">{children}</main>
+    </div>
   );
 }
