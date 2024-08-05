@@ -52,7 +52,7 @@ const MenuCategoryPage: React.FC = () => {
 
   const handleEditCategory = async (id: number, name: string) => {
     try {
-      await apiClient.put(`/api/menu_categories/${id}`, { name });
+      await apiClient.patch(`/api/menu_categories/${id}`, { name });
       setCategories(categories.map(category =>
         category.id === id ? { ...category, name } : category
       ));
