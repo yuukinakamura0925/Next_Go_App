@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -10,8 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"Next_Go_App/ent/book"
-	"Next_Go_App/ent/user"
 )
 
 // BookCreate is the builder for creating a Book entity.
@@ -149,7 +149,7 @@ func (bc *BookCreate) check() error {
 	if _, ok := bc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Book.updated_at"`)}
 	}
-	if _, ok := bc.mutation.UserID(); !ok {
+	if len(bc.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Book.user"`)}
 	}
 	return nil

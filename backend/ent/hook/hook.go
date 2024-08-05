@@ -3,10 +3,9 @@
 package hook
 
 import (
+	"Next_Go_App/ent"
 	"context"
 	"fmt"
-
-	"Next_Go_App/ent"
 )
 
 // The BookFunc type is an adapter to allow the use of ordinary
@@ -19,6 +18,18 @@ func (f BookFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BookMutation", m)
+}
+
+// The MenuCategoryFunc type is an adapter to allow the use of ordinary
+// function as MenuCategory mutator.
+type MenuCategoryFunc func(context.Context, *ent.MenuCategoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MenuCategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MenuCategoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MenuCategoryMutation", m)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary

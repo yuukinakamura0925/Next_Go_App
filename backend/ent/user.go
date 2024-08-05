@@ -3,13 +3,13 @@
 package ent
 
 import (
+	"Next_Go_App/ent/user"
 	"fmt"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"Next_Go_App/ent/user"
 )
 
 // User is the model entity for the User schema.
@@ -35,17 +35,28 @@ type User struct {
 
 // UserEdges holds the relations/edges for other nodes in the graph.
 type UserEdges struct {
+	// MenuCategories holds the value of the menu_categories edge.
+	MenuCategories []*MenuCategory `json:"menu_categories,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
+}
+
+// MenuCategoriesOrErr returns the MenuCategories value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) MenuCategoriesOrErr() ([]*MenuCategory, error) {
+	if e.loadedTypes[0] {
+		return e.MenuCategories, nil
+	}
+	return nil, &NotLoadedError{edge: "menu_categories"}
 }
 
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
@@ -124,6 +135,11 @@ func (u *User) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (u *User) Value(name string) (ent.Value, error) {
 	return u.selectValues.Get(name)
+}
+
+// QueryMenuCategories queries the "menu_categories" edge of the User entity.
+func (u *User) QueryMenuCategories() *MenuCategoryQuery {
+	return NewUserClient(u.config).QueryMenuCategories(u)
 }
 
 // QueryBooks queries the "books" edge of the User entity.

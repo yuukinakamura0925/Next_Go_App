@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/menucategory"
+	"Next_Go_App/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -12,8 +15,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"Next_Go_App/ent/book"
-	"Next_Go_App/ent/user"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -70,12 +71,13 @@ var (
 	columnCheck sql.ColumnCheck
 )
 
-// columnChecker checks if the column exists in the given table.
+// checkColumn checks if the column exists in the given table.
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			book.Table: book.ValidColumn,
-			user.Table: user.ValidColumn,
+			book.Table:         book.ValidColumn,
+			menucategory.Table: menucategory.ValidColumn,
+			user.Table:         user.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

@@ -14,11 +14,7 @@ const DashboardPage: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await apiClient.get('/api/users/me', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
+        const response = await apiClient.get('/api/users/me');
         setUserData(response.data.user);
       } catch (error) {
         console.error('Error fetching user data:', error);

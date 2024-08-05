@@ -3,11 +3,11 @@
 package user
 
 import (
+	"Next_Go_App/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"Next_Go_App/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -353,6 +353,29 @@ func UpdatedAtLT(v time.Time) predicate.User {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// HasMenuCategories applies the HasEdge predicate on the "menu_categories" edge.
+func HasMenuCategories() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MenuCategoriesTable, MenuCategoriesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMenuCategoriesWith applies the HasEdge predicate on the "menu_categories" edge with a given conditions (other predicates).
+func HasMenuCategoriesWith(preds ...predicate.MenuCategory) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newMenuCategoriesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // HasBooks applies the HasEdge predicate on the "books" edge.

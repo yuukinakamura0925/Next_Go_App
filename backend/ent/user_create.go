@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/menucategory"
+	"Next_Go_App/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -10,8 +13,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"Next_Go_App/ent/book"
-	"Next_Go_App/ent/user"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -65,6 +66,21 @@ func (uc *UserCreate) SetNillableUpdatedAt(t *time.Time) *UserCreate {
 		uc.SetUpdatedAt(*t)
 	}
 	return uc
+}
+
+// AddMenuCategoryIDs adds the "menu_categories" edge to the MenuCategory entity by IDs.
+func (uc *UserCreate) AddMenuCategoryIDs(ids ...int) *UserCreate {
+	uc.mutation.AddMenuCategoryIDs(ids...)
+	return uc
+}
+
+// AddMenuCategories adds the "menu_categories" edges to the MenuCategory entity.
+func (uc *UserCreate) AddMenuCategories(m ...*MenuCategory) *UserCreate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return uc.AddMenuCategoryIDs(ids...)
 }
 
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
@@ -204,6 +220,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if nodes := uc.mutation.MenuCategoriesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.MenuCategoriesTable,
+			Columns: []string{user.MenuCategoriesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(menucategory.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := uc.mutation.BooksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

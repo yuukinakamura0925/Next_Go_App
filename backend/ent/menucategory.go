@@ -3,7 +3,7 @@
 package ent
 
 import (
-	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/menucategory"
 	"Next_Go_App/ent/user"
 	"fmt"
 	"strings"
@@ -13,29 +13,27 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// Book is the model entity for the Book schema.
-type Book struct {
+// MenuCategory is the model entity for the MenuCategory schema.
+type MenuCategory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID int `json:"user_id,omitempty"`
-	// Title holds the value of the "title" field.
-	Title string `json:"title,omitempty"`
-	// Body holds the value of the "body" field.
-	Body string `json:"body,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the BookQuery when eager-loading is set.
-	Edges        BookEdges `json:"edges"`
+	// The values are being populated by the MenuCategoryQuery when eager-loading is set.
+	Edges        MenuCategoryEdges `json:"edges"`
 	selectValues sql.SelectValues
 }
 
-// BookEdges holds the relations/edges for other nodes in the graph.
-type BookEdges struct {
+// MenuCategoryEdges holds the relations/edges for other nodes in the graph.
+type MenuCategoryEdges struct {
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -45,7 +43,7 @@ type BookEdges struct {
 
 // UserOrErr returns the User value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e BookEdges) UserOrErr() (*User, error) {
+func (e MenuCategoryEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
 	} else if e.loadedTypes[0] {
@@ -55,15 +53,15 @@ func (e BookEdges) UserOrErr() (*User, error) {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Book) scanValues(columns []string) ([]any, error) {
+func (*MenuCategory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case book.FieldID, book.FieldUserID:
+		case menucategory.FieldID, menucategory.FieldUserID:
 			values[i] = new(sql.NullInt64)
-		case book.FieldTitle, book.FieldBody:
+		case menucategory.FieldName:
 			values[i] = new(sql.NullString)
-		case book.FieldCreatedAt, book.FieldUpdatedAt:
+		case menucategory.FieldCreatedAt, menucategory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -73,107 +71,98 @@ func (*Book) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the Book fields.
-func (b *Book) assignValues(columns []string, values []any) error {
+// to the MenuCategory fields.
+func (mc *MenuCategory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case book.FieldID:
+		case menucategory.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			b.ID = int(value.Int64)
-		case book.FieldUserID:
+			mc.ID = int(value.Int64)
+		case menucategory.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				b.UserID = int(value.Int64)
+				mc.UserID = int(value.Int64)
 			}
-		case book.FieldTitle:
+		case menucategory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field title", values[i])
+				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				b.Title = value.String
+				mc.Name = value.String
 			}
-		case book.FieldBody:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field body", values[i])
-			} else if value.Valid {
-				b.Body = value.String
-			}
-		case book.FieldCreatedAt:
+		case menucategory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				b.CreatedAt = value.Time
+				mc.CreatedAt = value.Time
 			}
-		case book.FieldUpdatedAt:
+		case menucategory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				b.UpdatedAt = value.Time
+				mc.UpdatedAt = value.Time
 			}
 		default:
-			b.selectValues.Set(columns[i], values[i])
+			mc.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the Book.
+// Value returns the ent.Value that was dynamically selected and assigned to the MenuCategory.
 // This includes values selected through modifiers, order, etc.
-func (b *Book) Value(name string) (ent.Value, error) {
-	return b.selectValues.Get(name)
+func (mc *MenuCategory) Value(name string) (ent.Value, error) {
+	return mc.selectValues.Get(name)
 }
 
-// QueryUser queries the "user" edge of the Book entity.
-func (b *Book) QueryUser() *UserQuery {
-	return NewBookClient(b.config).QueryUser(b)
+// QueryUser queries the "user" edge of the MenuCategory entity.
+func (mc *MenuCategory) QueryUser() *UserQuery {
+	return NewMenuCategoryClient(mc.config).QueryUser(mc)
 }
 
-// Update returns a builder for updating this Book.
-// Note that you need to call Book.Unwrap() before calling this method if this Book
+// Update returns a builder for updating this MenuCategory.
+// Note that you need to call MenuCategory.Unwrap() before calling this method if this MenuCategory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (b *Book) Update() *BookUpdateOne {
-	return NewBookClient(b.config).UpdateOne(b)
+func (mc *MenuCategory) Update() *MenuCategoryUpdateOne {
+	return NewMenuCategoryClient(mc.config).UpdateOne(mc)
 }
 
-// Unwrap unwraps the Book entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the MenuCategory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (b *Book) Unwrap() *Book {
-	_tx, ok := b.config.driver.(*txDriver)
+func (mc *MenuCategory) Unwrap() *MenuCategory {
+	_tx, ok := mc.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: Book is not a transactional entity")
+		panic("ent: MenuCategory is not a transactional entity")
 	}
-	b.config.driver = _tx.drv
-	return b
+	mc.config.driver = _tx.drv
+	return mc
 }
 
 // String implements the fmt.Stringer.
-func (b *Book) String() string {
+func (mc *MenuCategory) String() string {
 	var builder strings.Builder
-	builder.WriteString("Book(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", b.ID))
+	builder.WriteString("MenuCategory(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", mc.ID))
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", b.UserID))
+	builder.WriteString(fmt.Sprintf("%v", mc.UserID))
 	builder.WriteString(", ")
-	builder.WriteString("title=")
-	builder.WriteString(b.Title)
-	builder.WriteString(", ")
-	builder.WriteString("body=")
-	builder.WriteString(b.Body)
+	builder.WriteString("name=")
+	builder.WriteString(mc.Name)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(b.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(mc.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(b.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(mc.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// Books is a parsable slice of Book.
-type Books []*Book
+// MenuCategories is a parsable slice of MenuCategory.
+type MenuCategories []*MenuCategory

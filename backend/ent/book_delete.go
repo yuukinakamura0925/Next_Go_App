@@ -3,13 +3,13 @@
 package ent
 
 import (
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"Next_Go_App/ent/book"
-	"Next_Go_App/ent/predicate"
 )
 
 // BookDelete is the builder for deleting a Book entity.

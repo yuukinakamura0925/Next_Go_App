@@ -9,11 +9,11 @@ import (
 )
 
 type UserHandler struct {
-	userUsecase usecases.UserUsecase
+	userUsecase usecases.IUserUsecase
 }
 
 // NewUserHandler は新しい UserHandler を作成し、ルーティングを設定します。
-func NewUserHandler(api *gin.RouterGroup, authApi *gin.RouterGroup, userUsecase usecases.UserUsecase) {
+func NewUserHandler(api *gin.RouterGroup, authApi *gin.RouterGroup, userUsecase usecases.IUserUsecase) {
 	handler := &UserHandler{userUsecase: userUsecase}
 
 	// ユーザー登録エンドポイント

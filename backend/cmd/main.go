@@ -27,6 +27,10 @@ func main() {
 	bookRepo := repositories.NewBookRepository(client)
 	bookUsecase := usecases.NewBookUsecase(bookRepo)
 
+	// メニューカテゴリ関連の依存関係を設定
+	menuCategoryRepo := repositories.NewMenuCategoryRepository(client)
+	menuCategoryUsecase := usecases.NewMenuCategoryUsecase(menuCategoryRepo)
+
 	// APIルートグループを定義
 	api := router.Group("/api")
 	// 認証不要の公開APIルート
@@ -37,6 +41,7 @@ func main() {
 	// ハンドラを設定
 	handlers.NewUserHandler(api, authApi, userUsecase)
 	handlers.NewBookHandler(api, bookUsecase)
+	handlers.NewMenuCategoryHandler(api, menuCategoryUsecase)
 
 	// ルートハンドラの定義
 	router.GET("/", func(c *gin.Context) {

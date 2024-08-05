@@ -3,11 +3,11 @@
 package book
 
 import (
+	"Next_Go_App/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"Next_Go_App/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
