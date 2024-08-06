@@ -9,8 +9,9 @@ import (
 	// required by schema hooks.
 	_ "Next_Go_App/ent/runtime"
 
-	"entgo.io/ent/dialect/sql/schema"
 	"Next_Go_App/ent/migrate"
+
+	"entgo.io/ent/dialect/sql/schema"
 )
 
 type (

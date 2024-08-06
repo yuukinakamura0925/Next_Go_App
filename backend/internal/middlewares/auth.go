@@ -31,6 +31,8 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		// クレームからuser_idをコンテキストに設定
+		c.Set("user_id", claims.UserID)
 		// クレームからemailをコンテキストに設定
 		c.Set("email", claims.Email)
 		// 次のミドルウェアまたはハンドラを実行

@@ -3,6 +3,10 @@
 package ent
 
 import (
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/menucategory"
+	"Next_Go_App/ent/predicate"
+	"Next_Go_App/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -11,9 +15,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"Next_Go_App/ent/book"
-	"Next_Go_App/ent/predicate"
-	"Next_Go_App/ent/user"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -91,6 +92,21 @@ func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
 	return uu
 }
 
+// AddMenuCategoryIDs adds the "menu_categories" edge to the MenuCategory entity by IDs.
+func (uu *UserUpdate) AddMenuCategoryIDs(ids ...int) *UserUpdate {
+	uu.mutation.AddMenuCategoryIDs(ids...)
+	return uu
+}
+
+// AddMenuCategories adds the "menu_categories" edges to the MenuCategory entity.
+func (uu *UserUpdate) AddMenuCategories(m ...*MenuCategory) *UserUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return uu.AddMenuCategoryIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (uu *UserUpdate) AddBookIDs(ids ...int) *UserUpdate {
 	uu.mutation.AddBookIDs(ids...)
@@ -109,6 +125,27 @@ func (uu *UserUpdate) AddBooks(b ...*Book) *UserUpdate {
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
+}
+
+// ClearMenuCategories clears all "menu_categories" edges to the MenuCategory entity.
+func (uu *UserUpdate) ClearMenuCategories() *UserUpdate {
+	uu.mutation.ClearMenuCategories()
+	return uu
+}
+
+// RemoveMenuCategoryIDs removes the "menu_categories" edge to MenuCategory entities by IDs.
+func (uu *UserUpdate) RemoveMenuCategoryIDs(ids ...int) *UserUpdate {
+	uu.mutation.RemoveMenuCategoryIDs(ids...)
+	return uu
+}
+
+// RemoveMenuCategories removes "menu_categories" edges to MenuCategory entities.
+func (uu *UserUpdate) RemoveMenuCategories(m ...*MenuCategory) *UserUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return uu.RemoveMenuCategoryIDs(ids...)
 }
 
 // ClearBooks clears all "books" edges to the Book entity.
@@ -214,6 +251,51 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if uu.mutation.MenuCategoriesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.MenuCategoriesTable,
+			Columns: []string{user.MenuCategoriesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(menucategory.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedMenuCategoriesIDs(); len(nodes) > 0 && !uu.mutation.MenuCategoriesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.MenuCategoriesTable,
+			Columns: []string{user.MenuCategoriesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(menucategory.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.MenuCategoriesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.MenuCategoriesTable,
+			Columns: []string{user.MenuCategoriesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(menucategory.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if uu.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -342,6 +424,21 @@ func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
 	return uuo
 }
 
+// AddMenuCategoryIDs adds the "menu_categories" edge to the MenuCategory entity by IDs.
+func (uuo *UserUpdateOne) AddMenuCategoryIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.AddMenuCategoryIDs(ids...)
+	return uuo
+}
+
+// AddMenuCategories adds the "menu_categories" edges to the MenuCategory entity.
+func (uuo *UserUpdateOne) AddMenuCategories(m ...*MenuCategory) *UserUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return uuo.AddMenuCategoryIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (uuo *UserUpdateOne) AddBookIDs(ids ...int) *UserUpdateOne {
 	uuo.mutation.AddBookIDs(ids...)
@@ -360,6 +457,27 @@ func (uuo *UserUpdateOne) AddBooks(b ...*Book) *UserUpdateOne {
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
+}
+
+// ClearMenuCategories clears all "menu_categories" edges to the MenuCategory entity.
+func (uuo *UserUpdateOne) ClearMenuCategories() *UserUpdateOne {
+	uuo.mutation.ClearMenuCategories()
+	return uuo
+}
+
+// RemoveMenuCategoryIDs removes the "menu_categories" edge to MenuCategory entities by IDs.
+func (uuo *UserUpdateOne) RemoveMenuCategoryIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.RemoveMenuCategoryIDs(ids...)
+	return uuo
+}
+
+// RemoveMenuCategories removes "menu_categories" edges to MenuCategory entities.
+func (uuo *UserUpdateOne) RemoveMenuCategories(m ...*MenuCategory) *UserUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return uuo.RemoveMenuCategoryIDs(ids...)
 }
 
 // ClearBooks clears all "books" edges to the Book entity.
@@ -495,6 +613,51 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if uuo.mutation.MenuCategoriesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.MenuCategoriesTable,
+			Columns: []string{user.MenuCategoriesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(menucategory.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedMenuCategoriesIDs(); len(nodes) > 0 && !uuo.mutation.MenuCategoriesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.MenuCategoriesTable,
+			Columns: []string{user.MenuCategoriesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(menucategory.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.MenuCategoriesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.MenuCategoriesTable,
+			Columns: []string{user.MenuCategoriesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(menucategory.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if uuo.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -24,10 +24,19 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// EdgeMenuCategories holds the string denoting the menu_categories edge name in mutations.
+	EdgeMenuCategories = "menu_categories"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
 	// Table holds the table name of the user in the database.
 	Table = "users"
+	// MenuCategoriesTable is the table that holds the menu_categories relation/edge.
+	MenuCategoriesTable = "menu_categories"
+	// MenuCategoriesInverseTable is the table name for the MenuCategory entity.
+	// It exists in this package in order to avoid circular dependency with the "menucategory" package.
+	MenuCategoriesInverseTable = "menu_categories"
+	// MenuCategoriesColumn is the table column denoting the menu_categories relation/edge.
+	MenuCategoriesColumn = "user_id"
 	// BooksTable is the table that holds the books relation/edge.
 	BooksTable = "books"
 	// BooksInverseTable is the table name for the Book entity.
@@ -105,6 +114,20 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByMenuCategoriesCount orders the results by menu_categories count.
+func ByMenuCategoriesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMenuCategoriesStep(), opts...)
+	}
+}
+
+// ByMenuCategories orders the results by menu_categories terms.
+func ByMenuCategories(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMenuCategoriesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByBooksCount orders the results by books count.
 func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -117,6 +140,13 @@ func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newBooksStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newMenuCategoriesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MenuCategoriesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MenuCategoriesTable, MenuCategoriesColumn),
+	)
 }
 func newBooksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

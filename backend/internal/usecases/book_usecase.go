@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-type BookUsecase interface {
+type IBookUsecase interface {
 	CreateBook(ctx context.Context, title string, body string, userID int) (*ent.Book, error)
 	GetAllBooks(ctx context.Context) ([]*ent.Book, error)
 	GetBookByID(ctx context.Context, id int) (*ent.Book, error)
@@ -18,7 +18,7 @@ type bookUsecase struct {
 	bookRepo repositories.IBookRepository
 }
 
-func NewBookUsecase(bookRepo repositories.IBookRepository) BookUsecase {
+func NewBookUsecase(bookRepo repositories.IBookRepository) IBookUsecase {
 	return &bookUsecase{bookRepo: bookRepo}
 }
 

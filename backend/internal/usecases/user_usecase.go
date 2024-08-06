@@ -10,7 +10,7 @@ import (
 	"Next_Go_App/internal/utils"
 )
 
-type UserUsecase interface {
+type IUserUsecase interface {
 	SignUp(ctx context.Context, email, name, password string) (*ent.User, error)
 	SignIn(ctx context.Context, email, password string) (string, error)
 	GetUserByEmail(ctx context.Context, email string) (*ent.User, error)
@@ -21,7 +21,7 @@ type userUsecase struct {
 	passwordSvc services.PasswordService
 }
 
-func NewUserUsecase(userRepo repositories.IUserRepository, passwordSvc services.PasswordService) UserUsecase {
+func NewUserUsecase(userRepo repositories.IUserRepository, passwordSvc services.PasswordService) IUserUsecase {
 	return &userUsecase{
 		userRepo:    userRepo,
 		passwordSvc: passwordSvc,
@@ -56,7 +56,7 @@ func (u *userUsecase) SignIn(ctx context.Context, email, password string) (strin
 		return "", errors.New("incorrect password")
 	}
 	// JWTを生成
-	token, err := utils.GenerateJWT(user.Email)
+	token, err := utils.GenerateJWT(user.ID, user.Email)
 	if err != nil {
 		return "", err
 	}

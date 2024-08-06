@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"time"
-
 	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/menucategory"
 	"Next_Go_App/ent/schema"
 	"Next_Go_App/ent/user"
+	"time"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -38,6 +38,26 @@ func init() {
 	book.DefaultUpdatedAt = bookDescUpdatedAt.Default.(func() time.Time)
 	// book.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	book.UpdateDefaultUpdatedAt = bookDescUpdatedAt.UpdateDefault.(func() time.Time)
+	menucategoryFields := schema.MenuCategory{}.Fields()
+	_ = menucategoryFields
+	// menucategoryDescUserID is the schema descriptor for user_id field.
+	menucategoryDescUserID := menucategoryFields[0].Descriptor()
+	// menucategory.UserIDValidator is a validator for the "user_id" field. It is called by the builders before save.
+	menucategory.UserIDValidator = menucategoryDescUserID.Validators[0].(func(int) error)
+	// menucategoryDescName is the schema descriptor for name field.
+	menucategoryDescName := menucategoryFields[1].Descriptor()
+	// menucategory.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	menucategory.NameValidator = menucategoryDescName.Validators[0].(func(string) error)
+	// menucategoryDescCreatedAt is the schema descriptor for created_at field.
+	menucategoryDescCreatedAt := menucategoryFields[2].Descriptor()
+	// menucategory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	menucategory.DefaultCreatedAt = menucategoryDescCreatedAt.Default.(func() time.Time)
+	// menucategoryDescUpdatedAt is the schema descriptor for updated_at field.
+	menucategoryDescUpdatedAt := menucategoryFields[3].Descriptor()
+	// menucategory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	menucategory.DefaultUpdatedAt = menucategoryDescUpdatedAt.Default.(func() time.Time)
+	// menucategory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	menucategory.UpdateDefaultUpdatedAt = menucategoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.

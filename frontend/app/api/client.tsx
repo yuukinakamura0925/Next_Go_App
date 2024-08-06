@@ -7,4 +7,13 @@ const apiClient = axios.create({
   },
 });
 
+// リクエストにデフォルトの Authorization ヘッダーを追加
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export default apiClient;

@@ -31,6 +31,28 @@ var (
 			},
 		},
 	}
+	// MenuCategoriesColumns holds the columns for the "menu_categories" table.
+	MenuCategoriesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "user_id", Type: field.TypeInt},
+	}
+	// MenuCategoriesTable holds the schema information for the "menu_categories" table.
+	MenuCategoriesTable = &schema.Table{
+		Name:       "menu_categories",
+		Columns:    MenuCategoriesColumns,
+		PrimaryKey: []*schema.Column{MenuCategoriesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "menu_categories_users_menu_categories",
+				Columns:    []*schema.Column{MenuCategoriesColumns[4]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -49,10 +71,12 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		BooksTable,
+		MenuCategoriesTable,
 		UsersTable,
 	}
 )
 
 func init() {
 	BooksTable.ForeignKeys[0].RefTable = UsersTable
+	MenuCategoriesTable.ForeignKeys[0].RefTable = UsersTable
 }

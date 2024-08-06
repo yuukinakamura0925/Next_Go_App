@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"Next_Go_App/ent/book"
+	"Next_Go_App/ent/predicate"
+	"Next_Go_App/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -11,9 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"Next_Go_App/ent/book"
-	"Next_Go_App/ent/predicate"
-	"Next_Go_App/ent/user"
 )
 
 // BookUpdate is the builder for updating Book entities.
@@ -160,7 +160,7 @@ func (bu *BookUpdate) check() error {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`ent: validator failed for field "Book.body": %w`, err)}
 		}
 	}
-	if _, ok := bu.mutation.UserID(); bu.mutation.UserCleared() && !ok {
+	if bu.mutation.UserCleared() && len(bu.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Book.user"`)
 	}
 	return nil
@@ -383,7 +383,7 @@ func (buo *BookUpdateOne) check() error {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`ent: validator failed for field "Book.body": %w`, err)}
 		}
 	}
-	if _, ok := buo.mutation.UserID(); buo.mutation.UserCleared() && !ok {
+	if buo.mutation.UserCleared() && len(buo.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Book.user"`)
 	}
 	return nil

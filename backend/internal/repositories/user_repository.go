@@ -26,6 +26,7 @@ func NewUserRepository(client *ent.Client) IUserRepository {
 
 // CreateUser は新しいユーザーを作成します。
 func (r *userRepository) CreateUser(ctx context.Context, email, name, password string) (*ent.User, error) {
+
 	return r.client.User.
 		Create().
 		SetEmail(email).

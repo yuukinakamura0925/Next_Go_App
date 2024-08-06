@@ -23,16 +23,18 @@ var jwtKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 // Claims はJWTのペイロードを表します。
 type Claims struct {
-	Email string `json:"email"`
+	UserID int    `json:"user_id"`
+	Email  string `json:"email"`
 	jwt.RegisteredClaims
 }
 
 // GenerateJWT は指定されたメールアドレスを含むJWTトークンを生成します。
-func GenerateJWT(email string) (string, error) {
+func GenerateJWT(id int, email string) (string, error) {
 	// トークンの有効期限を設定します。
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
-		Email: email,
+		UserID: id,
+		Email:  email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},

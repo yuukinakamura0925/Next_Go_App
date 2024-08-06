@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"Next_Go_App/ent"
 	"Next_Go_App/internal/usecases"
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,10 +11,10 @@ import (
 )
 
 type BookHandler struct {
-	bookUsecase usecases.BookUsecase
+	bookUsecase usecases.IBookUsecase
 }
 
-func NewBookHandler(api *gin.RouterGroup, bookUsecase usecases.BookUsecase) {
+func NewBookHandler(api *gin.RouterGroup, bookUsecase usecases.IBookUsecase) {
 	handler := &BookHandler{bookUsecase: bookUsecase}
 
 	api.POST("/books", handler.CreateBook)
@@ -25,18 +25,9 @@ func NewBookHandler(api *gin.RouterGroup, bookUsecase usecases.BookUsecase) {
 }
 
 func (h *BookHandler) CreateBook(c *gin.Context) {
-	fmt.Println("CreateBook")
-	fmt.Println(c)
 
-	type NewBookRequest struct {
-		Title  string `json:"title" binding:"required"`
-		Body   string `json:"body" binding:"required"`
-		UserID int    `json:"user_id" binding:"required"`
-	}
-
-	var req NewBookRequest
+	var req ent.Book
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Println("Error:", err)                                                               // エラー内容をログに出力
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request", "details": err.Error()}) // エラー詳細をレスポンスに含める
 		return
 	}
